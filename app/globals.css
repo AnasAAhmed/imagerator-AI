@@ -35,6 +35,24 @@
     --radius: 0.5rem;
   }
 
+  .webimg {
+    /* --a: 8deg; /*control the angle of rotation (the smaller, the better) */
+    width: 600px;
+    /* aspect-ratio: 1; */
+    border-radius: 20px;
+    transform: perspective(400px) rotate3d(var(--r, 1, -1), 0, calc(var(--i, 1)*var(--a)));
+    -webkit-mask:
+      linear-gradient(135deg, #000c 40%, #000, #000c 60%) 100% 100%/250% 250%;
+    transition: .4s;
+    cursor: pointer;
+  }
+
+  .webimg:hover {
+    --i: -1;
+    -webkit-mask-position: 0 0;
+  }
+
+
   .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
@@ -70,6 +88,7 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }
@@ -89,6 +108,7 @@
 
 /* ========================================== TAILWIND STYLES */
 @layer utilities {
+
   /* ===== UTILITIES */
   .wrapper {
     @apply max-w-5xl mx-auto px-5 md:px-10 w-full text-dark-400 p-16-regular;
@@ -195,7 +215,7 @@
   }
 
   .select-trigger {
-    @apply flex items-center  gap-2 py-5 capitalize focus-visible:outline-none;
+    @apply flex items-center gap-2 py-5 capitalize focus-visible:outline-none;
   }
 
   .select-item {
@@ -293,7 +313,7 @@
   }
 
   .media-uploader_cta-image {
-    @apply rounded-[16px] bg-white  p-5 shadow-sm shadow-purple-200/50;
+    @apply rounded-[16px] bg-white p-5 shadow-sm shadow-purple-200/50;
   }
 
   /* Navbar Component */
@@ -328,7 +348,7 @@
   }
 
   .sidebar-nav_element {
-    @apply flex-center p-16-semibold w-full whitespace-nowrap rounded-full bg-cover  transition-all hover:bg-purple-100 hover:shadow-inner;
+    @apply flex-center p-16-semibold w-full whitespace-nowrap rounded-full bg-cover transition-all hover:bg-purple-100 hover:shadow-inner;
   }
 
   .sidebar-link {

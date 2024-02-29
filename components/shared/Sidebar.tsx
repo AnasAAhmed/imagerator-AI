@@ -22,7 +22,7 @@ const Sidebar = () => {
                             {navLinks.slice(0, 6).map((link) => {
                                 const isActive = link.route === pathname
                                 return (
-                                    <li key={link.route} className={`sidebar-nav-elements group ${isActive ? 'bg-purple-gradient' : 'text-gray-700'}`}>
+                                    <li key={link.route} className={`sidebar-nav-elements group ${isActive ? 'bg-purple-gradient rounded-xl' : 'text-gray-700'}`}>
                                         <Link href={link.route} className='sidebar-link'>
                                             <Image src={link.icon} alt='logo' width={24} height={24} className={`${isActive && 'brightness-200'}`} />
                                             {link.label}
@@ -36,7 +36,7 @@ const Sidebar = () => {
                             {navLinks.slice(6).map((link) => {
                                 const isActive = link.route === pathname
                                 return (
-                                    <li key={link.route} className={`sidebar-nav-elements group ${isActive ? 'bg-purple-gradient' : 'text-gray-700'}`}>
+                                    <li key={link.route} className={`sidebar-nav-elements group ${isActive ? 'bg-purple-gradient rounded-xl' : 'text-gray-700'}`}>
                                         <Link href={link.route} className='sidebar-link'>
                                             <Image src={link.icon} alt='logo' width={24} height={24} className={`${isActive && 'brightness-200'}`} />
                                             {link.label}
