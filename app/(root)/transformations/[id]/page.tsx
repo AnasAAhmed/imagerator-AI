@@ -1,7 +1,5 @@
 
-import { auth } from "@clerk/nextjs";
 import Image from "next/image";
-import Link from "next/link";
 
 
 import { Button } from "@/components/ui/button";
@@ -11,9 +9,17 @@ import Header from "@/components/shared/Header";
 import TransFormedImage from "@/components/shared/TransFormedImage";
 import { getImagebyId } from "@/lib/actions/image.actions";
 import { DeleteConfirmation } from "@/components/shared/DeleteConfirmation";
+import { auth } from "@clerk/nextjs/server";
+import SmartLink from "@/components/shared/SmartLink";
 
-const ImageDetails = async ({ params: { id } }: SearchParamProps) => {
-  const { userId } = auth();
+const ImageDetails = async (props: SearchParamProps) => {
+  const params = await props.params;
+
+  const {
+    id
+  } = params;
+
+  const { userId } = await auth.protect();
 
   const image = await getImagebyId(id);
 
@@ -89,9 +95,9 @@ const ImageDetails = async ({ params: { id } }: SearchParamProps) => {
         {userId === image.author.clerkId && (
           <div className="mt-4 space-y-4">
             <Button asChild type="button" className="submit-button capitalize">
-              <Link href={`/transformations/${image._id}/update`}>
+              <SmartLink href={`/transformations/${image._id}/update`}>
                 Update Image
-              </Link>
+              </SmartLink>
             </Button>
 
             <DeleteConfirmation imageId={image._id} />

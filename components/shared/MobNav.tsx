@@ -3,7 +3,7 @@ import { Sheet, SheetContent, SheetTrigger,} from "@/components/ui/sheet"
 import { navLinks } from "@/constants"
 import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs"
 import Image from "next/image"
-import Link from "next/link"
+import SmartLink from "@/components/shared/SmartLink";
 import { usePathname } from "next/navigation"
 import { Button } from "../ui/button"
 
@@ -11,11 +11,11 @@ const MobNav = () => {
     const pathname = usePathname();
     return (
         <header className="header">
-            <Link href={"/"} className="flex items-center gap-2 md:py-2">
+            <SmartLink href={"/"} className="flex items-center gap-2 md:py-2">
                 <Image src={"/assets/images/logo-text.svg"} alt="logo"
                     width={180} height={28} />
 
-            </Link>
+            </SmartLink>
             <nav className="flex gap-2 ">
                 <SignedIn>
                     <UserButton afterSignOutUrl="/" />
@@ -42,10 +42,10 @@ const MobNav = () => {
                                         const isActive = link.route === pathname
                                         return (
                                             <li key={link.route} className={`sidebar-nav-elements group ${isActive ? 'bg-purple-gradient' : 'text-gray-700'}`}>
-                                                <Link href={link.route} className='sidebar-link cursor-pointer'>
+                                                <SmartLink prefetch href={link.route} className='sidebar-link cursor-pointer'>
                                                     <Image src={link.icon} alt='logo' width={24} height={24} className={`${isActive && 'brightness-200'}`} />
                                                     {link.label}
-                                                </Link>
+                                                </SmartLink>
                                             </li>
                                         )
                                     })}
@@ -58,9 +58,9 @@ const MobNav = () => {
                 </SignedIn>
                 <SignedOut>
                         <Button asChild className='button bg-purple-gradient bg-cover'>
-                            <Link href={"/sign-in"}>
+                            <SmartLink href={"/sign-in"}>
                                 Login
-                            </Link>
+                            </SmartLink>
                         </Button>
                     </SignedOut>
             </nav>

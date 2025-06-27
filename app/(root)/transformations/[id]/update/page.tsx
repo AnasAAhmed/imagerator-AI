@@ -1,4 +1,4 @@
-import { auth } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
 import Header from "@/components/shared/Header";
@@ -7,8 +7,14 @@ import { transformationTypes } from "@/constants";
 import { getUserById } from "@/lib/actions/user.actions";
 import { getImagebyId } from "@/lib/actions/image.actions";
 
-const Page = async ({ params: { id } }: SearchParamProps) => {
-  const { userId } = auth();
+const Page = async (props: SearchParamProps) => {
+  const params = await props.params;
+
+  const {
+    id
+  } = params;
+
+  const { userId } = await auth.protect();
 
   if (!userId) redirect("/sign-in");
 

@@ -1,7 +1,7 @@
 import { SignUp } from '@clerk/nextjs'
 
 const SignUpPage = () => {
-  return <SignUp />
+  return <div className='min-h-[95%] flex justify-center items-center'><SignUp /></div>
 }
 
 export default SignUpPage

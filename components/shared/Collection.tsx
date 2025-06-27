@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
+import SmartLink from "@/components/shared/SmartLink";
 import { useSearchParams, useRouter } from "next/navigation";
 import { CldImage } from "next-cloudinary";
 
@@ -18,17 +18,20 @@ import { formUrlQuery } from "@/lib/utils";
 import { Button } from "../ui/button";
 
 import { Search } from "./Search";
+import { Loader2 } from "lucide-react";
 
 export const Collection = ({
   hasSearch = false,
   images,
   totalPages = 1,
   page,
+  isLoading = false
 }: {
   images: IImage[];
   totalPages?: number;
   page: number;
   hasSearch?: boolean;
+  isLoading?: boolean;
 }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -45,7 +48,6 @@ export const Collection = ({
 
     router.push(newUrl, { scroll: false });
   };
-
   return (
     <>
       <div className="collection-heading">
@@ -53,7 +55,7 @@ export const Collection = ({
         {hasSearch && <Search />}
       </div>
 
-      {images.length > 0 ? (
+      {isLoading ? <div className="collection-empty"><Loader2 size={'3rem'} className="animate-spin" /></div> : images.length > 0 ? (
         <ul className="collection-list">
           {images.map((image) => (
             <Card image={image} key={image._id} />
@@ -97,7 +99,7 @@ export const Collection = ({
 const Card = ({ image }: { image: IImage }) => {
   return (
     <li>
-      <Link href={`/transformations/${image._id}`} className="collection-card">
+      <SmartLink href={`/transformations/${image._id}`} className="collection-card">
         <CldImage
           src={image.publicId}
           alt={image.title}
@@ -113,17 +115,16 @@ const Card = ({ image }: { image: IImage }) => {
             {image.title}
           </p>
           <Image
-            src={`/assets/icons/${
-              transformationTypes[
+            src={`/assets/icons/${transformationTypes[
                 image.transformationType as TransformationTypeKey
               ].icon
-            }`}
+              }`}
             alt={image.title}
             width={24}
             height={24}
           />
         </div>
-      </Link>
+      </SmartLink>
     </li>
   );
 };

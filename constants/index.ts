@@ -39,11 +39,7 @@ export const navLinks = [
       route: "/credits",
       icon: "/assets/icons/bag.svg",
     },
-    {
-      label: "AI-Image Generator",
-      route: "/image-generator",
-      icon: "/assets/icons/image.svg",
-    },
+    
   ];
   
   export const plans = [
