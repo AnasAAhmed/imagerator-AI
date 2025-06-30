@@ -9,7 +9,6 @@ const Profile = async (props: SearchParamProps) => {
   const searchParams = await props.searchParams;
   const page = Number(searchParams?.page) || 1;
   const { userId } = await auth.protect();
-  const clerk = await clerkClient();
 
   let message = ''
   let user: User | null = null;
