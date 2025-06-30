@@ -18,7 +18,8 @@ import { formUrlQuery } from "@/lib/utils";
 import { Button } from "../ui/button";
 
 import { Search } from "./Search";
-import { Loader2 } from "lucide-react";
+import { Loader, Loader2 } from "lucide-react";
+import { Suspense } from "react";
 
 export const Collection = ({
   hasSearch = false,
@@ -52,7 +53,10 @@ export const Collection = ({
     <>
       <div className="collection-heading">
         <h2 className="h2-bold text-dark-600">Recent Edits</h2>
-        {hasSearch && <Search />}
+        {hasSearch && <Suspense fallback={<Loader size={'3rem'} className='animate-spin' />}>
+          <Search />
+        </Suspense>
+        }
       </div>
 
       {isLoading ? <div className="collection-empty"><Loader2 size={'3rem'} className="animate-spin" /></div> : images.length > 0 ? (
@@ -116,8 +120,8 @@ const Card = ({ image }: { image: IImage }) => {
           </p>
           <Image
             src={`/assets/icons/${transformationTypes[
-                image.transformationType as TransformationTypeKey
-              ].icon
+              image.transformationType as TransformationTypeKey
+            ].icon
               }`}
             alt={image.title}
             width={24}

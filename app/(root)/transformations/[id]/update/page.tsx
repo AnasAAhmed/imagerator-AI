@@ -23,8 +23,8 @@ const Page = async (props: SearchParamProps) => {
   } catch (error) {
     message = (error as Error).message;
   }
-  if (message || !user) return <div>{message}</div>;
-
+if (message) return <div>{message}</div>;
+  if (!user) return <div>Unauthorized</div>;
   const image = await getImagebyId(id);
 
   const transformation =

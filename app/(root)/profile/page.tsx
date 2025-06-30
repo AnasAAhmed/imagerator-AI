@@ -4,6 +4,8 @@ import { Collection } from "@/components/shared/Collection";
 import Header from "@/components/shared/Header";
 import { getUserImages } from "@/lib/actions/image.actions";
 import { getUserById } from "@/lib/actions/user.actions";
+import { Suspense } from "react";
+import { Loader } from "lucide-react";
 
 const Profile = async (props: SearchParamProps) => {
   const searchParams = await props.searchParams;
@@ -17,8 +19,8 @@ const Profile = async (props: SearchParamProps) => {
   } catch (error) {
     message = (error as Error).message;
   }
-  if (message || !user) return <div>{message}</div>;
-
+  if (message) return <div>{message}</div>;
+  if (!user) return <div>Unauthorized</div>;
   const images = await getUserImages({ page, userId: user._id });
 
   return (
@@ -56,11 +58,13 @@ const Profile = async (props: SearchParamProps) => {
       </section>
 
       <section className="mt-8 md:mt-14">
-        <Collection
-          images={images?.data}
-          totalPages={images?.totalPages}
-          page={page}
-        />
+        <Suspense fallback={<Loader size={'3rem'} className='animate-spin' />}>
+          <Collection
+            images={images?.data}
+            totalPages={images?.totalPages}
+            page={page}
+          />
+        </Suspense>
       </section>
     </>
   );

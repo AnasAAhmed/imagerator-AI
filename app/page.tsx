@@ -3,9 +3,10 @@ import ClientImageSection from '@/components/shared/ClientImageSection'
 import SmartLink from '@/components/shared/SmartLink'
 // import { Collection } from '@/components/shared/Collection'
 import { navLinks } from '@/constants'
+import { Loader } from 'lucide-react'
 // import { getAllImages } from '@/lib/actions/image.actions'
 import Image from 'next/image'
-import React from 'react'
+import React, { Suspense } from 'react'
 
 export const dynamic = 'force-static';
 
@@ -41,7 +42,9 @@ const Home = async (props: SearchParamProps) => {
         </ul>
       </section>
       <section className="sm:mt-12">
+        <Suspense fallback={<Loader size={'3rem'} className='animate-spin'/>}>
         <ClientImageSection />
+        </Suspense>
       </section>
     </>
   )

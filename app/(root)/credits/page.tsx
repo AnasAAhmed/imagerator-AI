@@ -19,7 +19,8 @@ const Credits = async () => {
   } catch (error) {
     message = (error as Error).message;
   }
-  if (message || !user) return <div>{message}</div>;
+  if (message) return <div>{message}</div>;
+  if (!user) return <div>Unauthorized</div>;
 
   return (
     <>
@@ -70,7 +71,7 @@ const Credits = async () => {
                     plan={plan.name}
                     amount={plan.price}
                     credits={plan.credits}
-                    buyerId={user._id}
+                    buyerId={user!._id}
                   />
                 </SignedIn>
               )}

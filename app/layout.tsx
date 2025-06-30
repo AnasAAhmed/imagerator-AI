@@ -8,6 +8,7 @@ import Sidebar from "@/components/shared/Sidebar";
 import MobNav from "@/components/shared/MobNav";
 import { Toaster } from "@/components/ui/toaster";
 import ProgressBar from "@/components/shared/ProgressBar";
+import { Suspense } from "react";
 
 const IBMPlex = IBM_Plex_Sans({
   subsets: ["latin"],
@@ -31,7 +32,9 @@ export default function RootLayout({
     }}>
       <html lang="en">
         <body className={cn("font-IBMPlex antialiased", IBMPlex.variable)}>
-          <ProgressBar/>
+          <Suspense fallback={''}>
+            <ProgressBar />
+          </Suspense>
           <main className="root">
             <Sidebar />
             <MobNav />
