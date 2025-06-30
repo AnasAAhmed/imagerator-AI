@@ -54,6 +54,17 @@ declare type CreateUserParams = {
     userId: string;
     path: string;
   };
+  declare type User = {
+    _id:string;
+    clerkId:string;
+    email:string;
+    username:string;
+    photo:string;
+    firstName:string;
+    lastName:string;
+    planId:string;
+    creditBalance:number;
+  }
   
   declare type Transformations = {
     restore?: boolean;

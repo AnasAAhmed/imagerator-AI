@@ -12,7 +12,14 @@ const Credits = async () => {
   const { userId } = await auth.protect();
 
 
-  const user = await getUserById(userId);
+  let message = ''
+  let user: User | null = null;
+  try {
+    user = await getUserById(userId);
+  } catch (error) {
+    message = (error as Error).message;
+  }
+  if (message || !user) return <div>{message}</div>;
 
   return (
     <>
@@ -42,9 +49,8 @@ const Credits = async () => {
                     className="flex items-center gap-4"
                   >
                     <Image
-                      src={`/assets/icons/${
-                        inclusion.isIncluded ? "check.svg" : "cross.svg"
-                      }`}
+                      src={`/assets/icons/${inclusion.isIncluded ? "check.svg" : "cross.svg"
+                        }`}
                       alt="check"
                       width={24}
                       height={24}

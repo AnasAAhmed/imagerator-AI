@@ -46,6 +46,23 @@
     transition: .4s;
     cursor: pointer;
   }
+@keyframes shine {
+  0% {
+    left: -50%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+.animate-shine {
+  animation: shine 1s linear infinite;
+}
+.animate-marquee {
+  display: inline-block;
+  min-width: 100%;
+  animation: marquee 20s linear infinite;
+}
 
   .webimg:hover {
     --i: -1;

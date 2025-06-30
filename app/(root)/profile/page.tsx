@@ -1,7 +1,5 @@
-import { auth } from "@clerk/nextjs/server";
+import { auth, clerkClient } from "@clerk/nextjs/server";
 import Image from "next/image";
-import { redirect } from "next/navigation";
-
 import { Collection } from "@/components/shared/Collection";
 import Header from "@/components/shared/Header";
 import { getUserImages } from "@/lib/actions/image.actions";
@@ -11,9 +9,17 @@ const Profile = async (props: SearchParamProps) => {
   const searchParams = await props.searchParams;
   const page = Number(searchParams?.page) || 1;
   const { userId } = await auth.protect();
+  const clerk = await clerkClient();
 
+  let message = ''
+  let user: User | null = null;
+  try {
+    user = await getUserById(userId);
+  } catch (error) {
+    message = (error as Error).message;
+  }
+  if (message || !user) return <div>{message}</div>;
 
-  const user = await getUserById(userId);
   const images = await getUserImages({ page, userId: user._id });
 
   return (

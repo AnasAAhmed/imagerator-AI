@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import User from "../database/models/user.model";
 import { connectToDB } from "../database/mongo";
 import { handleError } from "../utils";
+import { clerkClient } from "@clerk/nextjs/server";
 
 // CREATE
 export async function createUser(user: CreateUserParams) {
@@ -20,17 +21,36 @@ export async function createUser(user: CreateUserParams) {
 }
 
 // READ
-export async function getUserById(userId: string) {
+export async function getUserById(userId: string): Promise<User | null> {
   try {
+    const clerk = await clerkClient();
+
     await connectToDB();
 
-    const user = await User.findOne({ clerkId: userId });
+    let user = await User.findOne({ clerkId: userId });
 
-    if (!user) throw new Error("User not found");
+    if (!user) {
+      // Recreate user manually using Clerk API
+      const clerkUser = await clerk.users.getUser(userId);
+      if (!clerkUser || !clerkUser.emailAddresses?.length) {
+        throw new Error("Invalid user from Clerk");
+      }
+      await connectToDB();
+      const newUser = await User.create({
+        email: clerkUser.emailAddresses[0].emailAddress,
+        username: clerkUser.firstName + " " + clerkUser.lastName,
+        clerkId: clerkUser.id,
+        photo: clerkUser.imageUrl,
+      });
+      console.log('newUsr created: ' + newUser);
+
+      user = newUser;
+    }
 
     return JSON.parse(JSON.stringify(user));
   } catch (error) {
     handleError(error);
+    return null;
   }
 }
 
@@ -44,7 +64,7 @@ export async function updateUser(clerkId: string, user: UpdateUserParams) {
     });
 
     if (!updatedUser) throw new Error("User update failed");
-    
+
     return JSON.parse(JSON.stringify(updatedUser));
   } catch (error) {
     handleError(error);
@@ -80,11 +100,11 @@ export async function updateCredits(userId: string, creditFee: number) {
 
     const updatedUserCredits = await User.findOneAndUpdate(
       { _id: userId },
-      { $inc: { creditBalance: creditFee }},
+      { $inc: { creditBalance: creditFee } },
       { new: true }
     )
 
-    if(!updatedUserCredits) throw new Error("User credits update failed");
+    if (!updatedUserCredits) throw new Error("User credits update failed");
 
     return JSON.parse(JSON.stringify(updatedUserCredits));
   } catch (error) {

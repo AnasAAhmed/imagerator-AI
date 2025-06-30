@@ -16,9 +16,15 @@ const Page = async (props: SearchParamProps) => {
 
   const { userId } = await auth.protect();
 
-  if (!userId) redirect("/sign-in");
+  let message = ''
+  let user: User | null = null;
+  try {
+    user = await getUserById(userId);
+  } catch (error) {
+    message = (error as Error).message;
+  }
+  if (message || !user) return <div>{message}</div>;
 
-  const user = await getUserById(userId);
   const image = await getImagebyId(id);
 
   const transformation =

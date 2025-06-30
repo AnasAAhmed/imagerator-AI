@@ -23,17 +23,21 @@ const ClientImageSection = () => {
                 const res = await fetch(`/api/get-images?page=${page}&query=${searchQuery}`);
 
                 const data = await res.json();
+                if (!res.ok) {
+                    throw new Error(JSON.stringify(res.status + ' ' + res.statusText))
+                }
                 setImages(data.images);
                 setTotalPages(data.totalPage);
+                setIsLoading(false);
+
             } catch (error) {
                 console.error('Failed to fetch images:', error);
                 toast({
-                    title: "Error",
+                    title: "Failed to fetch images",
                     description: (error as Error).message,
                     duration: 3000,
                     className: "error-toast",
                 });
-            } finally {
                 setIsLoading(false);
             }
         };
@@ -44,9 +48,9 @@ const ClientImageSection = () => {
     return (
         <Collection
             hasSearch
-            images={images}
-            totalPages={totalPages}
-            page={page}
+            images={images || []}
+            totalPages={totalPages || 0}
+            page={page || 1}
             isLoading={isLoading}
         />
     );

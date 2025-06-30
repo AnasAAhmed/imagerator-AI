@@ -11,6 +11,7 @@ import { getImagebyId } from "@/lib/actions/image.actions";
 import { DeleteConfirmation } from "@/components/shared/DeleteConfirmation";
 import { auth } from "@clerk/nextjs/server";
 import SmartLink from "@/components/shared/SmartLink";
+import SignInRedirect from "@/components/SignInRedirect";
 
 const ImageDetails = async (props: SearchParamProps) => {
   const params = await props.params;
@@ -19,13 +20,18 @@ const ImageDetails = async (props: SearchParamProps) => {
     id
   } = params;
 
-  const { userId } = await auth.protect();
+  const { userId } = await auth();
+  if (!userId) {
+    return (
+      <SignInRedirect redirectTo={`/`} />
+    );
+  }
 
   const image = await getImagebyId(id);
 
   return (
     <>
-      <Header title={image.title} subTitle=""/>
+      <Header title={image.title} subTitle="" />
 
       <section className="mt-5 flex flex-wrap gap-4">
         <div className="p-14-medium md:p-16-medium flex gap-2">
@@ -102,7 +108,7 @@ const ImageDetails = async (props: SearchParamProps) => {
 
             <DeleteConfirmation imageId={image._id} />
           </div>
-        )} 
+        )}
       </section>
     </>
   );

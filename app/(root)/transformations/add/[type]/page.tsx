@@ -1,5 +1,6 @@
 import Header from '@/components/shared/Header'
 import TransformationForm from '@/components/shared/TransformationForm';
+import SignInRedirect from '@/components/SignInRedirect';
 import { transformationTypes } from '@/constants'
 import { getUserById } from '@/lib/actions/user.actions';
 import { auth } from '@clerk/nextjs/server';
@@ -12,10 +13,22 @@ const AddTransformationType = async (props: SearchParamProps) => {
     type
   } = params;
 
-  const { userId } = await auth.protect();
+  const { userId } = await auth();
+  if (!userId) {
+    return (
+      <SignInRedirect redirectTo={`/transformations/add/${type}`} />
+    );
+  }
   const transformation = transformationTypes[type];
+  let message = ''
+  let user: User | null = null;
+  try {
+    user = await getUserById(userId);
+  } catch (error) {
+    message = (error as Error).message;
+  }
+  if (message || !user) return <div>{message}</div>;
 
-  const user = await getUserById(userId);
   return (
     <>
       <Header title={transformation.title}

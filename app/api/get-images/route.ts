@@ -62,6 +62,7 @@ export async function GET(req: Request) {
 
     } catch (error) {
         console.error('getAllImages Error: ' + error);
-        return NextResponse.json((error as Error).message, { status: 500 });
+        const errorMessage=(error as Error).message;
+        return NextResponse.json(errorMessage.includes('mongodb')?'Internal Server Error':errorMessage, { status: 500,statusText:errorMessage.includes('mongodb')?'Internal Server Error':errorMessage});
     }
 }
