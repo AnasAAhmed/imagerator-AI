@@ -10,7 +10,7 @@ import { auth } from "@clerk/nextjs/server";
 
 import { Metadata } from "next";
 
-export const metaData: Metadata = {
+export const metadata: Metadata = {
   title: 'Credits Pricing',
   description: 'Buy credits for more manipulation here are the pricing and features' + " | Imaginify",
 }

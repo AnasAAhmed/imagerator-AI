@@ -1,7 +1,7 @@
 import { SignUp } from '@clerk/nextjs'
 import { Metadata } from 'next'
 
-export const metaData: Metadata = {
+export const metadata: Metadata = {
   title: 'Sign-up',
   description: 'Create your fisrt account to get best out of it' + " | Imaginify",
 }

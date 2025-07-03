@@ -13,7 +13,7 @@ import { auth } from "@clerk/nextjs/server";
 import SmartLink from "@/components/shared/SmartLink";
 import SignInRedirect from "@/components/SignInRedirect";
 import { Metadata } from "next";
-export const metaData:Metadata={
+export const metadata:Metadata={
  title: 'Image Details',
     description: 'Details of coresponding image' + " | Imaginify",
 }

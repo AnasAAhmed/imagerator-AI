@@ -8,7 +8,7 @@ import { getUserById } from "@/lib/actions/user.actions";
 import { getImagebyId } from "@/lib/actions/image.actions";
 
 import { Metadata } from "next";
-export const metaData:Metadata={
+export const metadata:Metadata={
  title: 'Image Update',
     description: 'Update the coresponding image' + " | Imaginify",
 }
