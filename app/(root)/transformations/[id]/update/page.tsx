@@ -7,6 +7,12 @@ import { transformationTypes } from "@/constants";
 import { getUserById } from "@/lib/actions/user.actions";
 import { getImagebyId } from "@/lib/actions/image.actions";
 
+import { Metadata } from "next";
+export const metaData:Metadata={
+ title: 'Image Update',
+    description: 'Update the coresponding image' + " | Imaginify",
+}
+
 const Page = async (props: SearchParamProps) => {
   const params = await props.params;
 

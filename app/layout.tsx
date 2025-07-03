@@ -17,8 +17,67 @@ const IBMPlex = IBM_Plex_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Imaginify",
-  description: "AI-powered image generator",
+  title: {
+    default: "Imaginify - AI-powered image editing",
+    template: "%s | Imaginify"
+  },
+  description: "Imaginify lets you transform your images using AI generative fill, remove backgrounds, change object colors, and remove unwanted objects with Cloudinary AI integration.",
+  keywords: [
+    "AI image editor",
+    "generative fill",
+    "remove background",
+    "object removal",
+    "image color change",
+    "Cloudinary AI",
+    "image generator",
+    "photo editor online",
+    "AI photo editing"
+  ],
+  authors: [{ name: "Anas Ahmed", url: "https://imagerator-ai.vercel.app/" }],
+  creator: "Imaginify",
+  publisher: "Imaginify",
+  applicationName: "Imaginify",
+  metadataBase: new URL("https://imagerator-ai.vercel.app/"),
+  openGraph: {
+    title: "Imaginify - AI-powered image editing",
+    description: "Transform your images with AI: generative fill, object removal, background removal, and color changes, powered by Cloudinary AI.",
+    url: "https://imagerator-ai.vercel.app/",
+    siteName: "Imaginify",
+    images: [
+      {
+        url: "/assets/images/hero.webp",
+        width: 1200,
+        height: 630,
+        alt: "Imaginify - AI-powered image editing"
+      }
+    ],
+    locale: "en_US",
+    type: "website"
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Imaginify - AI-powered image editing",
+    description: "Transform your images with AI generative fill, object removal, and more using Cloudinary AI.",
+    images: ["https://imagerator-ai.vercel.app/assets/images/hero.webp"], // replace with actual image
+    creator: "@anasahmedd" 
+  },
+  icons: {
+    icon: "/favicon.ico",    
+    apple: "/favicon.png",  
+    shortcut: "/favicon.png"   
+  },
+  manifest: "/manifest",
+  category: "technology",
+  robots: {
+    index: true,
+    follow: true,
+    nocache: false,
+    googleBot: {
+      index: true,
+      follow: true,
+      noimageindex: false
+    }
+  }
 };
 
 export default function RootLayout({

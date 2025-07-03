@@ -12,7 +12,11 @@ import { DeleteConfirmation } from "@/components/shared/DeleteConfirmation";
 import { auth } from "@clerk/nextjs/server";
 import SmartLink from "@/components/shared/SmartLink";
 import SignInRedirect from "@/components/SignInRedirect";
-
+import { Metadata } from "next";
+export const metaData:Metadata={
+ title: 'Image Details',
+    description: 'Details of coresponding image' + " | Imaginify",
+}
 const ImageDetails = async (props: SearchParamProps) => {
   const params = await props.params;
 

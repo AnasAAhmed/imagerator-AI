@@ -8,6 +8,13 @@ import { getUserById } from "@/lib/actions/user.actions";
 import Checkout from "@/components/shared/Checkout";
 import { auth } from "@clerk/nextjs/server";
 
+import { Metadata } from "next";
+
+export const metaData: Metadata = {
+  title: 'Credits Pricing',
+  description: 'Buy credits for more manipulation here are the pricing and features' + " | Imaginify",
+}
+
 const Credits = async () => {
   const { userId } = await auth.protect();
 

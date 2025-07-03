@@ -6,6 +6,12 @@ import { getUserImages } from "@/lib/actions/image.actions";
 import { getUserById } from "@/lib/actions/user.actions";
 import { Suspense } from "react";
 import { Loader } from "lucide-react";
+import { Metadata } from "next";
+
+export const metaData: Metadata = {
+  title: 'My Profile',
+  description: 'In this page you can check your credits status and manipulation you have done' + " | Imaginify",
+}
 
 const Profile = async (props: SearchParamProps) => {
   const searchParams = await props.searchParams;

@@ -124,6 +124,7 @@ export const navLinks = [
     restore: {
       type: "restore",
       title: "Restore Image",
+      image:'/assets/images/restore.webp',
       subTitle: "Refine images by removing noise and imperfections",
       config: { restore: true },
       icon: "image.svg",
@@ -131,6 +132,7 @@ export const navLinks = [
     removeBackground: {
       type: "removeBackground",
       title: "Background Remove",
+      image:'/assets/images/bg-remove.webp',
       subTitle: "Removes the background of the image using AI",
       config: { removeBackground: true },
       icon: "camera.svg",
@@ -138,6 +140,7 @@ export const navLinks = [
     fill: {
       type: "fill",
       title: "Generative Fill",
+      image:'/assets/images/hero.webp',
       subTitle: "Enhance an image's dimensions using AI outpainting",
       config: { fillBackground: true },
       icon: "stars.svg",
@@ -145,6 +148,7 @@ export const navLinks = [
     remove: {
       type: "remove",
       title: "Object Remove",
+      image:'/assets/images/obj-remove.webp',
       subTitle: "Identify and eliminate objects from images",
       config: {
         remove: { prompt: "", removeShadow: true, multiple: true },
@@ -154,6 +158,7 @@ export const navLinks = [
     recolor: {
       type: "recolor",
       title: "Object Recolor",
+      image:'/assets/images/obj-recolor.webp',
       subTitle: "Identify and recolor objects from the image",
       config: {
         recolor: { prompt: "", to: "", multiple: true },
