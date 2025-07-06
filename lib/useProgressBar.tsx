@@ -6,32 +6,46 @@ type ProgressState = {
   start: () => void;
   complete: () => void;
   reset: () => void;
-  setProgress: (value: number) => void;
 };
 
-export const useProgressStore = create<ProgressState>((set) => ({
-  progress: 0,
-  loading: false,
-  start: () => {
-    set({ loading: true, progress: 0 });
+export const useProgressStore = create<ProgressState>((set, get) => {
+  let incrementTimer: NodeJS.Timeout | null = null;
+  let showTimeout: NodeJS.Timeout | null = null;
 
-    const stepTimeouts = [
-      // setTimeout(() => set({ progress: 0 }), 100),
-      setTimeout(() => set({ progress: 50 }), 100),
-      setTimeout(() => set({ progress: 75 }), 200),
-    ];
+  return {
+    progress: 0,
+    loading: false,
 
-    // set({ stepTimeouts }); // Optional: store them to cancel later
-  },
-  complete: () => {
-    set({ progress: 100 });
+    start: () => {
+      showTimeout = setTimeout(() => {
+        set({ loading: true, progress: 20 });
 
-    setTimeout(() => {
-      set({ loading: false });
-    }, 300); 
-  },
-  reset: () => {
-    set({ loading: false, progress: 0 });
-  },
-  setProgress: (value: number) => set({ progress: value }),
-}));
+        incrementTimer = setInterval(() => {
+          set((state) => {
+            if (state.progress < 90) {
+              return { progress: state.progress + Math.random() * 8 }; // random smooth increment
+            }
+            return state;
+          });
+        }, 200);
+      }, 100);
+    },
+
+    complete: () => {
+      if (showTimeout) clearTimeout(showTimeout);
+      if (incrementTimer) clearInterval(incrementTimer);
+
+      set({loading: false ,progress: 100 });
+
+      setTimeout(() => {
+        set({ progress: 0 });
+      }, 300);
+    },
+
+    reset: () => {
+      if (showTimeout) clearTimeout(showTimeout);
+      if (incrementTimer) clearInterval(incrementTimer);
+      set({ loading: false, progress: 0 });
+    },
+  };
+});

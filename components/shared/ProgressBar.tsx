@@ -10,8 +10,12 @@ export default function ProgressBar() {
   const complete = useProgressStore((s) => s.complete);
   const loading = useProgressStore((s) => s.loading);
   useEffect(() => {
-    if (loading) return complete();
-  }, [searchParams]);
+  const timer = setTimeout(() => {
+    complete();
+  }, 150); // adjust as you like
+  return () => clearTimeout(timer);
+}, [searchParams]);
+
 
   return (
     <div className="fixed top-0 left-0 z-[9999] h-[3px] w-full bg-transparent">
