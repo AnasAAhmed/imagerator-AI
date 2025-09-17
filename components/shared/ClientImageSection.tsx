@@ -20,14 +20,14 @@ const ClientImageSection = () => {
         const fetchImages = async () => {
             setIsLoading(true);
             try {
-                const res = await fetch(`/api/get-images?page=${page}&query=${searchQuery}`);
+                const res = await fetch(`/api/get-images?page=${page}&query=${decodeURIComponent(searchQuery)}`);
 
                 const data = await res.json();
                 if (!res.ok) {
                     throw new Error(JSON.stringify(res.status + ' ' + res.statusText))
                 }
                 setImages(data.images);
-                setTotalPages(data.totalPage);
+                setTotalPages(data.totalPages);
                 setIsLoading(false);
 
             } catch (error) {

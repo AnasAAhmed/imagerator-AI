@@ -59,7 +59,7 @@ export const Collection = ({
         }
       </div>
 
-      {isLoading ? <div className="collection-empty"><Loader2 size={'3rem'} className="animate-spin" /></div> : images.length > 0 ? (
+      {isLoading ? <div className="collection-empty"><Loader2 size={'4rem'} className="animate-spin" /></div> : images.length > 0 ? (
         <ul className="collection-list">
           {images.map((image) => (
             <Card image={image} key={image._id} />

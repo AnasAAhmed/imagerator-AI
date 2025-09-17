@@ -15,39 +15,51 @@ export async function GET(req: Request) {
     const { searchParams } = new URL(req.url);
     const page = Number(searchParams.get('page') || 1);
     const limit = Number(searchParams.get('limit') || 9);
-    const searchQuery = searchParams.get('searchQuery')!;
+    const rawQuery = searchParams.get("query");
+    const searchQuery = rawQuery ? decodeURIComponent(rawQuery) : "";
     const skipAmount = (page - 1) * limit;
 
     try {
         await connectToDB();
 
-        cloudinary.config({
-            cloud_name: process.env.CLOUDINARY_NAME,
-            api_key: process.env.CLOUDINARY_API_KEY,
-            api_secret: process.env.CLOUDINARY_API_SECRET,
-            secure: true,
-        })
 
-        let expression = 'folder=imaginify';
+        //It is cloudinary auto tags based search in theri db then it retunn publicId of images thruogh wich we search i our db currently futher images wouldnot have auto tags becasue free quota free tags has ended
 
-        if (searchQuery) {
-            expression += ` AND ${searchQuery}`
-        }
+        // cloudinary.config({
+        //     cloud_name: process.env.CLOUDINARY_NAME,
+        //     api_key: process.env.CLOUDINARY_API_KEY,
+        //     api_secret: process.env.CLOUDINARY_API_SECRET,
+        //     secure: true,
+        // })
 
-        const { resources } = await cloudinary.search
-            .expression(expression)
-            .execute();
+        // let expression = 'folder=imaginify';
 
-        const resourceIds = resources.map((resource: any) => resource.public_id);
+        // if (searchQuery) {
+        //     expression += ` AND ${searchQuery}`
+        // }
+
+        // const { resources } = await cloudinary.search
+        //     .expression(expression)
+        //     .execute();
+
+        // const resourceIds = resources.map((resource: any) => resource.public_id);
+
+        // let query = {};
+
+        // if (searchQuery) {
+        //     query = {
+        //         publicId: {
+        //             $in: resourceIds
+        //         }
+        //     }
+        // }
 
         let query = {};
 
         if (searchQuery) {
             query = {
-                publicId: {
-                    $in: resourceIds
-                }
-            }
+                $text: { $search: searchQuery }
+            };
         }
 
         const images = await populateUser(Image.find(query))
@@ -57,12 +69,13 @@ export async function GET(req: Request) {
 
         const totalImages = await Image.find(query).countDocuments();
         const savedImages = await Image.find().countDocuments();
+        const totalPages = Math.ceil(totalImages / limit)
 
-        return NextResponse.json({ images, totalImages, savedImages }, { status: 200 });
+        return NextResponse.json({ images,totalPages, totalImages, savedImages }, { status: 200 });
 
     } catch (error) {
         console.error('getAllImages Error: ' + error);
-        const errorMessage=(error as Error).message;
-        return NextResponse.json(errorMessage.includes('mongodb')?'Internal Server Error':errorMessage, { status: 500,statusText:errorMessage.includes('mongodb')?'Internal Server Error':errorMessage});
+        const errorMessage = (error as Error).message;
+        return NextResponse.json(errorMessage.includes('mongodb') ? 'Internal Server Error' : errorMessage, { status: 500, statusText: errorMessage.includes('mongodb') ? 'Internal Server Error' : errorMessage });
     }
 }

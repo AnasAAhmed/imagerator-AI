@@ -39,6 +39,8 @@ const ImageSchema = new Schema({
     updatedAtAt:{type:Date,default:Date.now},
 });
 
+ImageSchema.index({ title: "text", prompt: "text", color: "text" });
+
 const Image = models?.Image || model("Image",ImageSchema);
 
 export default Image;
