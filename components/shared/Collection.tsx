@@ -1,25 +1,16 @@
-"use client";
-
 import Image from "next/image";
 import SmartLink from "@/components/shared/SmartLink";
-import { useSearchParams, useRouter } from "next/navigation";
-import { CldImage } from "next-cloudinary";
+// import { CldImage } from "next-cloudinary";
 
-import {
-  Pagination,
-  PaginationContent,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
 import { transformationTypes } from "@/constants";
 import { IImage } from "@/lib/database/models/image.model";
-import { formUrlQuery } from "@/lib/utils";
 
 import { Button } from "../ui/button";
 
 import { Search } from "./Search";
 import { Loader, Loader2 } from "lucide-react";
 import { Suspense } from "react";
+import PaginationControls from "./PaginationControls";
 
 export const Collection = ({
   hasSearch = false,
@@ -34,21 +25,7 @@ export const Collection = ({
   hasSearch?: boolean;
   isLoading?: boolean;
 }) => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-
-  // PAGINATION HANDLER
-  const onPageChange = (action: string) => {
-    const pageValue = action === "next" ? Number(page) + 1 : Number(page) - 1;
-
-    const newUrl = formUrlQuery({
-      searchParams: searchParams.toString(),
-      key: "page",
-      value: pageValue,
-    });
-
-    router.push(newUrl, { scroll: false });
-  };
+  
   return (
     <>
       <div className="collection-heading">
@@ -72,29 +49,7 @@ export const Collection = ({
       )}
 
       {totalPages > 1 && (
-        <Pagination className="mt-10">
-          <PaginationContent className="flex w-full">
-            <Button
-              disabled={Number(page) <= 1}
-              className="collection-btn"
-              onClick={() => onPageChange("prev")}
-            >
-              <PaginationPrevious className="hover:bg-transparent hover:text-white" />
-            </Button>
-
-            <p className="flex-center p-16-medium w-fit flex-1">
-              {page} / {totalPages}
-            </p>
-
-            <Button
-              className="button w-32 bg-purple-gradient bg-cover text-white"
-              onClick={() => onPageChange("next")}
-              disabled={Number(page) >= totalPages}
-            >
-              <PaginationNext className="hover:bg-transparent hover:text-white" />
-            </Button>
-          </PaginationContent>
-        </Pagination>
+        <PaginationControls totalPages={totalPages} page={page}/>
       )}
     </>
   );
@@ -104,8 +59,18 @@ const Card = ({ image }: { image: IImage }) => {
   return (
     <li>
       <SmartLink href={`/transformations/${image._id}`} className="collection-card">
-        <CldImage
+        {/* <CldImage
           src={image.publicId}
+          alt={image.title}
+          width={image.width}
+          height={image.height}
+          {...image.config}
+          loading="lazy"
+          className="h-52 w-full rounded-[10px] object-cover"
+          sizes="(max-width: 767px) 100vw, (max-width: 1279px) 50vw, 33vw"
+        /> */}
+        <Image
+          src={image.secureURL}
           alt={image.title}
           width={image.width}
           height={image.height}

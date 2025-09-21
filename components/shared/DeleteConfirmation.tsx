@@ -17,7 +17,7 @@ import { deleteImage } from "@/lib/actions/image.actions";
 
 import { Button } from "../ui/button";
 
-export const DeleteConfirmation = ({ imageId }: { imageId: string }) => {
+export const DeleteConfirmation = ({ imageId ,publicId}: { imageId: string,publicId:string }) => {
   const [isPending, startTransition] = useTransition();
 
   return (
@@ -48,7 +48,7 @@ export const DeleteConfirmation = ({ imageId }: { imageId: string }) => {
             className="border bg-red-500 text-white hover:bg-red-600"
             onClick={() =>
               startTransition(async () => {
-                await deleteImage(imageId);
+                await deleteImage(imageId,publicId);
               })
             }
           >

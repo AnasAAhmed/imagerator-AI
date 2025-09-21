@@ -110,7 +110,7 @@ const ImageDetails = async (props: SearchParamProps) => {
               </SmartLink>
             </Button>
 
-            <DeleteConfirmation imageId={image._id} />
+            <DeleteConfirmation imageId={image._id} publicId={image.publicId} />
           </div>
         )}
       </section>

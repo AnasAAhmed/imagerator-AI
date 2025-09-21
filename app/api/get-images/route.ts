@@ -1,14 +1,8 @@
 import Image from "@/lib/database/models/image.model";
 import User from "@/lib/database/models/user.model";
 import { connectToDB } from "@/lib/database/mongo";
-import { v2 as cloudinary } from 'cloudinary';
+// import { v2 as cloudinary } from 'cloudinary';
 import { NextResponse } from "next/server";
-
-const populateUser = (query: any) => query.populate({
-    path: 'author',
-    model: User,
-    select: '_id firstName lastName clerkId'
-})
 
 export async function GET(req: Request) {
 
@@ -62,16 +56,21 @@ export async function GET(req: Request) {
             };
         }
 
-        const images = await populateUser(Image.find(query))
+        const images = await Image.find(query)
             .sort({ updatedAt: -1 })
             .skip(skipAmount)
-            .limit(limit);
+            .limit(limit)
+            .populate({
+                path: 'author',
+                model: User,
+                select: '_id firstName lastName clerkId'
+            });
 
         const totalImages = await Image.find(query).countDocuments();
-        const savedImages = await Image.find().countDocuments();
+        // const savedImages = await Image.find().countDocuments();
         const totalPages = Math.ceil(totalImages / limit)
 
-        return NextResponse.json({ images,totalPages, totalImages, savedImages }, { status: 200 });
+        return NextResponse.json({ images, totalPages, totalImages }, { status: 200 });
 
     } catch (error) {
         console.error('getAllImages Error: ' + error);
