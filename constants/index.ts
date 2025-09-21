@@ -188,7 +188,7 @@ export const aspectRatioOptions = {
   },
   "4:5": {
     aspectRatio: "4:5",
-    label: "Instagram Defualt",
+    label: "Instagram Defualt (4:5)",
     width: 1080,
     height: 1350,
   },
