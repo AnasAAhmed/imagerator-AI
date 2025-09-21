@@ -67,7 +67,7 @@ const Card = ({ image }: { image: IImage }) => {
           alt={image.title}
           width={image.width}
           height={image.height}
-          {...image.config}
+          // {...image.config}
           loading="lazy"
           className="h-52 w-full rounded-[10px] object-cover"
           sizes="(max-width: 767px) 100vw, (max-width: 1279px) 50vw, 33vw"

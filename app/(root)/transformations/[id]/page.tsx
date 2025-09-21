@@ -18,18 +18,18 @@ export const metadata:Metadata={
     description: 'Details of coresponding image' + " | Imaginify",
 }
 const ImageDetails = async (props: SearchParamProps) => {
+  const { userId,isAuthenticated } = await auth();
+   if (!isAuthenticated) {
+     return (
+     <SignInRedirect redirectTo={`/`} />
+   );
+ }
   const params = await props.params;
 
   const {
     id
   } = params;
 
-  const { userId } = await auth();
-  if (!userId) {
-    return (
-      <SignInRedirect redirectTo={`/`} />
-    );
-  }
 
   const image = await getImagebyId(id);
 

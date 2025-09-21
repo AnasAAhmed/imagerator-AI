@@ -15,7 +15,7 @@ export default function SignInRedirect({ redirectTo }: { redirectTo?: string }) 
   // }, [redirectTo, router]);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-white text-black px-6">
+    <div className="min-h-screen flex flex-col items-center mt-10 md:mt-20 lg:mt-32 bg-white text-black px-6">
       <h1 className="text-2xl font-semibold mb-4">Hold on! You need to sign in</h1>
       <p className="text-center text-gray-700 max-w-md mb-8">
         To access this content, please sign in. You’ll be redirected shortly, or you can use the buttons below to navigate.

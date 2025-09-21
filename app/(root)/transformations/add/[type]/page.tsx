@@ -57,17 +57,17 @@ export async function generateMetadata(props: SearchParamProps) {
 }
 const AddTransformationType = async (props: SearchParamProps) => {
   const params = await props.params;
-
+  
   const {
     type
   } = params;
-
-  const { userId } = await auth();
-  if (!userId) {
+  const { userId,isAuthenticated } = await auth();
+  if (!isAuthenticated) {
     return (
       <SignInRedirect redirectTo={`/transformations/add/${type}`} />
     );
   }
+
   const transformation = transformationTypes[type];
   let message = ''
   let user: User | null = null;
