@@ -3,12 +3,13 @@
 import SmartLink from '@/components/shared/SmartLink'
 // import { Collection } from '@/components/shared/Collection'
 import { navLinks } from '@/constants'
-import { Loader } from 'lucide-react'
+import { Loader, Loader2 } from "lucide-react";
 import { getAllImages } from '@/lib/actions/image.actions'
 import Image from 'next/image'
 import React, { Suspense } from 'react'
 import { Collection } from '@/components/shared/Collection'
 import { IImage } from '@/lib/database/models/image.model'
+import { Search } from '@/components/shared/Search'
 
 // export const dynamic = 'force-static';
 
@@ -44,7 +45,13 @@ const Home = async (props: SearchParamProps) => {
         </ul>
       </section>
       <section className="sm:mt-12">
-        <Suspense fallback={<Loader size={'3rem'} className='animate-spin' />}>
+        <div className="collection-heading">
+          <h2 className="h2-bold text-dark-600">Recent Edits</h2>
+         <Suspense fallback={<Loader size={'3rem'} className='animate-spin' />}>
+            <Search />
+          </Suspense>
+        </div>
+        <Suspense fallback={<div className="collection-empty"><Loader2 size={'4rem'} className="animate-spin" /></div>}>
           {/* <ClientImageSection /> */}
           <AllImages page={page} searchQuery={searchQuery} />
         </Suspense>
@@ -70,7 +77,6 @@ async function AllImages({ page, searchQuery }: AllImagesType) {
       images={data?.images || []}
       totalPages={data?.totalPages || 0}
       page={page || 1}
-      isLoading={data ? false : true}
     />
   )
 }

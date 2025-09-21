@@ -5,7 +5,6 @@ import SmartLink from "@/components/shared/SmartLink";
 import { transformationTypes } from "@/constants";
 import { IImage } from "@/lib/database/models/image.model";
 
-import { Button } from "../ui/button";
 
 import { Search } from "./Search";
 import { Loader, Loader2 } from "lucide-react";
@@ -28,13 +27,7 @@ export const Collection = ({
   
   return (
     <>
-      <div className="collection-heading">
-        <h2 className="h2-bold text-dark-600">Recent Edits</h2>
-        {hasSearch && <Suspense fallback={<Loader size={'3rem'} className='animate-spin' />}>
-          <Search />
-        </Suspense>
-        }
-      </div>
+      
 
       {isLoading ? <div className="collection-empty"><Loader2 size={'4rem'} className="animate-spin" /></div> : images.length > 0 ? (
         <ul className="collection-list">
