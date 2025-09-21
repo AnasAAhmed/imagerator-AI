@@ -27,7 +27,7 @@ export async function getUserById(userId: string): Promise<User | null> {
 
     await connectToDB();
 
-    let user = await User.findOne({ clerkId: userId });
+    let user = await User.findOne({ clerkId: userId }).select('_id creditBalance');
 
     if (!user) {
       // Recreate user manually using Clerk API
@@ -42,8 +42,6 @@ export async function getUserById(userId: string): Promise<User | null> {
         clerkId: clerkUser.id,
         photo: clerkUser.imageUrl,
       });
-      console.log('newUsr created: ' + newUser);
-
       user = newUser;
     }
 

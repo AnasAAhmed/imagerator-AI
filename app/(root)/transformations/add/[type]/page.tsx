@@ -5,6 +5,11 @@ import { transformationTypes } from '@/constants'
 import { getUserById } from '@/lib/actions/user.actions';
 import { auth } from '@clerk/nextjs/server';
 import React from 'react'
+import { currentUser } from "@clerk/nextjs/server";
+
+
+export const dynamic = 'force-dynamic';
+
 export async function generateMetadata(props: SearchParamProps) {
   const params = await props.params;
   const {
@@ -33,7 +38,7 @@ export async function generateMetadata(props: SearchParamProps) {
       description: transformation.subTitle,
       images: [
         {
-          url: transformation.image||'/assets/images/hero.png',
+          url: transformation.image || '/assets/images/hero.png',
           width: 1200,
           height: 630,
           alt: "Imaginify - AI-powered image editing"
@@ -43,9 +48,9 @@ export async function generateMetadata(props: SearchParamProps) {
     twitter: {
       title: `${transformation.title} | Imaginify`,
       description: transformation.subTitle,
-       images: [
+      images: [
         {
-          url: transformation.image||'/assets/images/hero.png',
+          url: transformation.image || '/assets/images/hero.png',
           width: 1200,
           height: 630,
           alt: "Imaginify - AI-powered image editing"
@@ -56,13 +61,14 @@ export async function generateMetadata(props: SearchParamProps) {
 
 }
 const AddTransformationType = async (props: SearchParamProps) => {
+const userFromClerk = await currentUser();
+
   const params = await props.params;
-  
+
   const {
     type
   } = params;
-  const { userId,isAuthenticated } = await auth();
-  if (!isAuthenticated) {
+  if (!userFromClerk) {
     return (
       <SignInRedirect redirectTo={`/transformations/add/${type}`} />
     );
@@ -72,7 +78,7 @@ const AddTransformationType = async (props: SearchParamProps) => {
   let message = ''
   let user: User | null = null;
   try {
-    user = await getUserById(userId);
+    user = await getUserById(userFromClerk.id);
   } catch (error) {
     message = (error as Error).message;
   }

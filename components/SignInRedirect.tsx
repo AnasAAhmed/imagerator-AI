@@ -1,10 +1,8 @@
-'use client';
-
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+// import { useRouter } from 'next/navigation';
+import SmartLink from './shared/SmartLink';
 
 export default function SignInRedirect({ redirectTo }: { redirectTo?: string }) {
-  const router = useRouter();
+  // const router = useRouter();
 
   // useEffect(() => {
   //   const timeout = setTimeout(() => {
@@ -21,26 +19,18 @@ export default function SignInRedirect({ redirectTo }: { redirectTo?: string }) 
         To access this content, please sign in. You’ll be redirected shortly, or you can use the buttons below to navigate.
       </p>
       <div className="flex flex-wrap gap-4">
-        <button
-          onClick={() =>
-            router.push(`/sign-in?redirect_url=${encodeURIComponent(redirectTo||'/')}`)
-          }
+        <SmartLink
+          href={`/sign-in?redirect_url=${encodeURIComponent(redirectTo || '/')}`}
           className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition"
         >
           Login Now
-        </button>
-        <button
-          onClick={() => router.push('/')}
+        </SmartLink>
+        <SmartLink
+          href={'/'}
           className="px-6 py-2 border border-black text-black rounded-lg hover:bg-gray-100 transition"
         >
           Go to Home
-        </button>
-        <button
-          onClick={() => router.back()}
-          className="px-6 py-2 border border-black text-black rounded-lg hover:bg-gray-100 transition"
-        >
-          Go Back
-        </button>
+        </SmartLink>
       </div>
     </div>
   );

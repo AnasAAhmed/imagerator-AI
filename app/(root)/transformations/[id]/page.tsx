@@ -1,29 +1,25 @@
-
 import Image from "next/image";
-
-
 import { Button } from "@/components/ui/button";
 import { getImageSize } from "@/lib/utils";
-// import { DeleteConfirmation } from "@/components/shared/DeleteConfirmation";
 import Header from "@/components/shared/Header";
 import TransFormedImage from "@/components/shared/TransFormedImage";
 import { getImagebyId } from "@/lib/actions/image.actions";
 import { DeleteConfirmation } from "@/components/shared/DeleteConfirmation";
 import { auth } from "@clerk/nextjs/server";
 import SmartLink from "@/components/shared/SmartLink";
-import SignInRedirect from "@/components/SignInRedirect";
+// import SignInRedirect from "@/components/SignInRedirect";
 import { Metadata } from "next";
-export const metadata:Metadata={
- title: 'Image Details',
-    description: 'Details of coresponding image' + " | Imaginify",
+export const metadata: Metadata = {
+  title: 'Image Details',
+  description: 'Details of coresponding image' + " | Imaginify",
 }
 const ImageDetails = async (props: SearchParamProps) => {
-  const { userId,isAuthenticated } = await auth();
-   if (!isAuthenticated) {
-     return (
-     <SignInRedirect redirectTo={`/`} />
-   );
- }
+  const { userId } = await auth();
+  //    if (!isAuthenticated) {
+  //      return (
+  //      <SignInRedirect redirectTo={`/`} />
+  //    );
+  //  }
   const params = await props.params;
 
   const {
