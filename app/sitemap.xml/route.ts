@@ -7,7 +7,7 @@ type ImagesType = {
     totalPages: number;
 } | undefined
 export async function GET(request: NextRequest) {
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://imagerator-ai.vercel.app';
+    const baseUrl = process.env.SERVER_URL || 'https://imagerator-ai.vercel.app';
     const data: ImagesType = await getAllImagesForSitemap({ page: 1 });
 
     // Example: static pages with images

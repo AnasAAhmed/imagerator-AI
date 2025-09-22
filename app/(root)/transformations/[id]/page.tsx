@@ -9,6 +9,7 @@ import { auth } from "@clerk/nextjs/server";
 import SmartLink from "@/components/shared/SmartLink";
 import { IImage } from "@/lib/database/models/image.model";
 import { notFound } from "next/navigation";
+import DownloadBtn from "@/components/shared/DownloadBtn";
 
 export async function generateMetadata(props: SearchParamProps) {
   const params = await props.params;
@@ -128,13 +129,17 @@ const ImageDetails = async (props: SearchParamProps) => {
         <div className="transformation-grid">
           {/* MEDIA UPLOADER */}
           <div className="flex flex-col gap-4">
-            <h3 className="h3-bold text-dark-600">Original</h3>
+            <div className="flex-between">
+              <h3 className="h3-bold text-dark-600">Original</h3>
+
+                <DownloadBtn imgUrl={image.secureURL} title={image.title}/>
+            </div>
 
             <Image
               width={getImageSize(image.transformationType, image, "width")}
               height={getImageSize(image.transformationType, image, "height")}
               src={image.secureURL}
-              alt="image"
+              alt={image.title}
               className="transformation-original_image"
             />
           </div>

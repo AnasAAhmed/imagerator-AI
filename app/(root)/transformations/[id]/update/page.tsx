@@ -1,11 +1,10 @@
 import { auth } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation";
 
 import Header from "@/components/shared/Header";
 import TransformationForm from "@/components/shared/TransformationForm";
 import { transformationTypes } from "@/constants";
 import { getUserById } from "@/lib/actions/user.actions";
-import { getImagebyId } from "@/lib/actions/image.actions";
+import { getCachedImageById } from "@/lib/actions/image.actions";
 
 import { Metadata } from "next";
 export const metadata:Metadata={
@@ -31,7 +30,7 @@ const Page = async (props: SearchParamProps) => {
   }
 if (message) return <div>{message}</div>;
   if (!user) return <div>Unauthorized</div>;
-  const image = await getImagebyId(id);
+  const image = await getCachedImageById(id);
 
   const transformation =
     transformationTypes[image.transformationType as TransformationTypeKey];
