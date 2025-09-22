@@ -18,11 +18,11 @@ const TransFormedImage = ({
     const downloadHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault();
         download(getCldImageUrl({
-            width:image?.width,
-            height:image?.height,
-            src:image?.publicId,
+            width: image?.width,
+            height: image?.height,
+            src: image?.publicId,
             ...transformationConfig
-        }),title)
+        }), title)
     }
     return (
         <div className='flex flex-col gap-4'>

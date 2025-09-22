@@ -4,11 +4,7 @@ import SmartLink from "@/components/shared/SmartLink";
 
 import { transformationTypes } from "@/constants";
 import { IImage } from "@/lib/database/models/image.model";
-
-
-import { Search } from "./Search";
-import { Loader, Loader2 } from "lucide-react";
-import { Suspense } from "react";
+import { Loader2 } from "lucide-react";
 import PaginationControls from "./PaginationControls";
 
 export const Collection = ({
@@ -24,10 +20,10 @@ export const Collection = ({
   hasSearch?: boolean;
   isLoading?: boolean;
 }) => {
-  
+
   return (
     <>
-      
+
 
       {isLoading ? <div className="collection-empty"><Loader2 size={'4rem'} className="animate-spin" /></div> : images.length > 0 ? (
         <ul className="collection-list">
@@ -42,7 +38,7 @@ export const Collection = ({
       )}
 
       {totalPages > 1 && (
-        <PaginationControls totalPages={totalPages} page={page}/>
+        <PaginationControls totalPages={totalPages} page={page} />
       )}
     </>
   );
@@ -51,7 +47,7 @@ export const Collection = ({
 const Card = ({ image }: { image: IImage }) => {
   return (
     <li>
-      <SmartLink href={`/transformations/${image._id}`} className="collection-card">
+      <SmartLink href={`/transformations/${image._id}?title=${image.title.replaceAll(' ','+')}`} className="collection-card">
         {/* <CldImage
           src={image.publicId}
           alt={image.title}

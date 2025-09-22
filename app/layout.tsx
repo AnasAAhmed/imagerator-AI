@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     "photo editor online",
     "AI photo editing"
   ],
-  authors: [{ name: "Anas Ahmed", url: "https://imagerator-ai.vercel.app/" }],
+  authors: [{ name: "Anas Ahmed", url: "https://anasahmed-portfolio.vercel.app/" }],
   creator: "Imaginify",
   publisher: "Imaginify",
   applicationName: "Imaginify",
@@ -61,11 +61,11 @@ export const metadata: Metadata = {
     images: ["https://imagerator-ai.vercel.app/assets/images/hero.webp"], // replace with actual image
     creator: "@anasahmedd" 
   },
-  icons: {
-    icon: "/favicon.ico",    
-    apple: "/favicon.png",  
-    shortcut: "/favicon.png"   
-  },
+  // icons: {
+  //   icon: "/favicon.ico",    
+  //   apple: "/favicon.ico",  
+  //   shortcut: "/favicon.ico"   
+  // },
   manifest: "/manifest",
   category: "technology",
   robots: {

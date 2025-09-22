@@ -1,7 +1,14 @@
+import { getAllImagesForSitemap } from "@/lib/actions/image.actions";
+import { IImage } from "@/lib/database/models/image.model";
 import { type NextRequest } from "next/server";
 
+type ImagesType = {
+    images: IImage[];
+    totalPages: number;
+} | undefined
 export async function GET(request: NextRequest) {
     const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://imagerator-ai.vercel.app';
+    const data: ImagesType = await getAllImagesForSitemap({ page: 1 });
 
     // Example: static pages with images
     const staticPages = [
@@ -50,17 +57,34 @@ export async function GET(request: NextRequest) {
         }
     ];
 
-    const urls = staticPages.map(({ path, image }) => `
-    <url>
-      <loc>${baseUrl}${path}</loc>
-      <changefreq>weekly</changefreq>
-      <priority>0.8</priority>
-      <image:image>
-        <image:loc>${baseUrl}${image}</image:loc>
-        <image:caption>${path.replace("/", "").replace("-", " ")}</image:caption>
-      </image:image>
-    </url>
-  `).join("");
+    const urls = [
+        // Static pages
+        ...staticPages.map(({ path, image }) => `
+      <url>
+        <loc>${baseUrl}${path}</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+        <image:image>
+          <image:loc>${baseUrl}${image}</image:loc>
+          <image:caption>${path.replace("/", "").replace("-", " ")}</image:caption>
+        </image:image>
+      </url>
+    `),
+
+        // Dynamic transformation pages
+        ...(data?.images || []).slice(0, 50).map(img => `
+      <url>
+        <loc>${baseUrl}/transformations/${img._id}</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.7</priority>
+        <image:image>
+          <image:loc>${img.secureURL}</image:loc>
+          <image:caption>${img.title}</image:caption>
+        </image:image>
+      </url>
+    `)
+    ].join("");
+
 
     const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
   <urlset 

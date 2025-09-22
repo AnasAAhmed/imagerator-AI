@@ -23,7 +23,7 @@ const Sidebar = () => {
                                 const isActive = link.route === pathname
                                 return (
                                     <li key={link.route} className={`sidebar-nav-elements group ${isActive ? 'bg-purple-gradient text-primary-foreground rounded-xl' : 'text-gray-700'}`}>
-                                        <SmartLink prefetch href={link.route} className='sidebar-link'>
+                                        <SmartLink href={link.route} className='sidebar-link'>
                                             <Image src={link.icon} alt='logo' width={24} height={24} className={`${isActive && 'brightness-200'}`} />
                                             {link.label}
                                         </SmartLink>
@@ -37,7 +37,7 @@ const Sidebar = () => {
                                 const isActive = link.route === pathname
                                 return (
                                     <li key={link.route} className={`sidebar-nav-elements group ${isActive ? 'bg-purple-gradient text-primary-foreground rounded-xl' : 'text-gray-700'}`}>
-                                        <SmartLink href={link.route} className='sidebar-link'>
+                                        <SmartLink prefetch href={link.route} className='sidebar-link'>
                                             <Image src={link.icon} alt='logo' width={24} height={24} className={`${isActive && 'brightness-200'}`} />
                                             {link.label}
                                         </SmartLink>

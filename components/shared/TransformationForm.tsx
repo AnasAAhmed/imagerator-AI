@@ -26,6 +26,7 @@ import { getCldImageUrl } from "next-cloudinary";
 import { addImage, updateImage } from "@/lib/actions/image.actions";
 import { useRouter } from "next/navigation";
 import { InsufficientCredits} from "./InsufficientCredits";
+import { Loader2 } from "lucide-react";
 
 
 export const formSchema = z.object({
@@ -281,23 +282,24 @@ useEffect(()=>{
                 isTransforming={isTransformating}
                 setIsTransforming={setIsTransformating}
                 transformationConfig={transformationConfig}
+                hasDownload={image}
               />
             </div>
             <div className="flex flex-col gap-4">
               <Button
                 type="button"
-                className="submit-button capitalize"
+                className="submit-button gap-2 capitalize"
                 disabled={isTransformating || newTransformation === null}
                 onClick={onTransformHandler}
               >
-                {isTransformating ? 'Transforming...' : "Apply Transformation"}
+                {isTransformating ?<>Transforming... <Loader2 className="animate-spin"/></> : "Apply Transformation"}
               </Button>
               <Button
                 type="submit"
-                className="submit-button capitalize"
+                className="submit-button gap-2 capitalize"
                 disabled={isSubmitting}
               >
-                {isSubmitting ? 'Saving...' : "Save Image"}
+                {isSubmitting ? <>Saving... <Loader2 className="animate-spin"/></> : "Save Image"}
               </Button>
             </div>
           </form>

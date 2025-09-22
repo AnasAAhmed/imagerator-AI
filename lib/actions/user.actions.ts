@@ -39,6 +39,8 @@ export async function getUserById(userId: string): Promise<User | null> {
       const newUser = await User.create({
         email: clerkUser.emailAddresses[0].emailAddress,
         username: clerkUser.firstName + " " + clerkUser.lastName,
+        firstName: clerkUser.firstName,
+        lastName: clerkUser.lastName,
         clerkId: clerkUser.id,
         photo: clerkUser.imageUrl,
       });

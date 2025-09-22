@@ -19,7 +19,7 @@ export interface IImage extends Document {
       lastName: string;
     }
     createdAt?: Date;
-    updatedAt?: Date;
+    updatedAtAt?: Date;
   }
 
 const ImageSchema = new Schema({

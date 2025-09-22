@@ -7,12 +7,13 @@ import User from "../database/models/user.model";
 import Image from "../database/models/image.model";
 import { redirect } from "next/navigation";
 import { v2 as cloudinary } from 'cloudinary';
+import { cache } from "react";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_NAME!,
   api_key: process.env.CLOUDINARY_API_KEY!,
   api_secret: process.env.CLOUDINARY_API_SECRET!,
-  secure:true,
+  secure: true,
 });
 
 const populateUser = (query: any) => query.populate({
@@ -60,7 +61,7 @@ export async function updateImage({ image, userId, path }: UpdateImageParams) {
 
     const updateImage = await Image.findByIdAndUpdate(
       imageToUpdate._id,
-      image,
+      { ...image, updatedAtAt: Date.now() },
       { new: true }
     );
 
@@ -81,7 +82,7 @@ export async function deleteImage(imageId: string, publicId: string) {
     await Image.findByIdAndDelete(imageId);
     const result = await cloudinary.uploader.destroy(publicId);
     console.log(result);
-    
+
   } catch (error) {
     handleError(error);
   } finally {
@@ -91,7 +92,7 @@ export async function deleteImage(imageId: string, publicId: string) {
 }
 
 //get image
-export async function getImagebyId(imageId: string) {
+async function getImagebyId(imageId: string) {
   try {
     await connectToDB();
 
@@ -104,8 +105,8 @@ export async function getImagebyId(imageId: string) {
   } catch (error) {
     handleError(error);
   }
-
 }
+export const getCachedImageById = cache(getImagebyId);
 
 
 
@@ -118,7 +119,7 @@ export async function getAllImages({ limit = 9, page = 1, searchQuery = '' }: {
   try {
     await connectToDB();
 
-  
+
     // let expression = 'folder=imaginify';
 
     // if (searchQuery) {
@@ -140,17 +141,17 @@ export async function getAllImages({ limit = 9, page = 1, searchQuery = '' }: {
     //     }
     //   }
     // }
- let query = {};
+    let query = {};
 
-        if (searchQuery) {
-            query = {
-                $text: { $search: searchQuery }
-            };
-        }
+    if (searchQuery) {
+      query = {
+        $text: { $search: searchQuery }
+      };
+    }
     const skipAmount = (Number(page) - 1) * limit;
 
     const images = await populateUser(Image.find(query))
-      .sort({ updatedAt: -1 })
+      .sort({ updatedAtAt: -1 })
       .skip(skipAmount)
       .limit(limit);
 
@@ -182,7 +183,7 @@ export async function getUserImages({
     const skipAmount = (Number(page) - 1) * limit;
 
     const images = await populateUser(Image.find({ author: userId }))
-      .sort({ updatedAt: -1 })
+      .sort({ updatedAtAt: -1 })
       .skip(skipAmount)
       .limit(limit);
 
@@ -194,5 +195,34 @@ export async function getUserImages({
     };
   } catch (error) {
     handleError(error);
+  }
+}
+
+//Get All Image For Sitemap.xml
+export async function getAllImagesForSitemap({ limit = 50, page = 1 }: {
+  limit?: number;
+  page: number;
+}) {
+  try {
+    await connectToDB();
+
+    const skipAmount = (Number(page) - 1) * limit;
+
+    const images = await Image.find()
+      .select('_id title secureURL')
+      .sort({ updatedAtAt: -1 })
+      .skip(skipAmount)
+      .limit(limit);
+
+    const totalImages = await Image.find().countDocuments();
+    // const savedImages = await Image.find().countDocuments();
+
+    return {
+      images: JSON.parse(JSON.stringify(images)),
+      totalPages: Math.ceil(totalImages / limit),
+      // savedImages,
+    }
+  } catch (error) {
+    handleError(error)
   }
 }

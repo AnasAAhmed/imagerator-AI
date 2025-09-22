@@ -3,31 +3,83 @@ import { Button } from "@/components/ui/button";
 import { getImageSize } from "@/lib/utils";
 import Header from "@/components/shared/Header";
 import TransFormedImage from "@/components/shared/TransFormedImage";
-import { getImagebyId } from "@/lib/actions/image.actions";
+import { getCachedImageById } from "@/lib/actions/image.actions";
 import { DeleteConfirmation } from "@/components/shared/DeleteConfirmation";
 import { auth } from "@clerk/nextjs/server";
 import SmartLink from "@/components/shared/SmartLink";
-// import SignInRedirect from "@/components/SignInRedirect";
-import { Metadata } from "next";
-export const metadata: Metadata = {
-  title: 'Image Details',
-  description: 'Details of coresponding image' + " | Imaginify",
+import { IImage } from "@/lib/database/models/image.model";
+import { notFound } from "next/navigation";
+
+export async function generateMetadata(props: SearchParamProps) {
+  const params = await props.params;
+  const { id } = params;
+
+  const image: IImage & { author: User } = await getCachedImageById(id);
+
+  if (!image) {
+    return {
+      title: "404 Not Found | Imaginify",
+      description: "404 Page not found | Imaginify",
+      openGraph: {
+        title: `404 Not Found | Imaginify`,
+        description: "404 Page not found | Imaginify",
+      },
+      twitter: {
+        title: `404 Not Found | Imaginify`,
+        description: "404 Page not found | Imaginify",
+      },
+    };
+  }
+
+  const authorName = `${image.author.firstName} ${image.author.lastName}`;
+
+  const description = `Edited with Imaginify by ${authorName}. 
+  Details: ${image.prompt ? "prompt: " + image.prompt + ", " : ""} 
+  transformationType: ${image.transformationType}. 
+  | Imaginify - AI-powered image editing`;
+
+  return {
+    title: `${image.title} | Edited by ${authorName} with`,
+    description,
+    openGraph: {
+      title: `${image.title} | Edited by ${authorName} with Imaginify`,
+      description,
+      images: [
+        {
+          url: image.secureURL || "/assets/images/hero.png",
+          width: image.width || 1200,
+          height: image.height || 630,
+          alt: `${image.title} Edited by ${authorName} - Imaginify`,
+        },
+      ],
+    },
+    twitter: {
+      title: `${image.title} | Edited by ${authorName} with Imaginify`,
+      description,
+      images: [
+        {
+          url: image.secureURL || "/assets/images/hero.png",
+          width: image.width || 1200,
+          height: image.height || 630,
+          alt: `${image.title} Edited by ${authorName} - Imaginify`,
+        },
+      ],
+    },
+  };
 }
+
 const ImageDetails = async (props: SearchParamProps) => {
   const { userId } = await auth();
-  //    if (!isAuthenticated) {
-  //      return (
-  //      <SignInRedirect redirectTo={`/`} />
-  //    );
-  //  }
+
   const params = await props.params;
 
   const {
     id
   } = params;
 
+  const image: IImage & { author: User } | null = await getCachedImageById(id);
 
-  const image = await getImagebyId(id);
+  if (!image) return notFound();
 
   return (
     <>
@@ -93,7 +145,7 @@ const ImageDetails = async (props: SearchParamProps) => {
             type={image.transformationType}
             title={image.title}
             isTransforming={false}
-            transformationConfig={image.config}
+            transformationConfig={image.config!}
             hasDownload={true}
           />
         </div>
@@ -101,7 +153,7 @@ const ImageDetails = async (props: SearchParamProps) => {
         {userId === image.author.clerkId && (
           <div className="mt-4 space-y-4">
             <Button asChild type="button" className="submit-button capitalize">
-              <SmartLink href={`/transformations/${image._id}/update`}>
+              <SmartLink prefetch href={`/transformations/${image._id}/update`}>
                 Update Image
               </SmartLink>
             </Button>
