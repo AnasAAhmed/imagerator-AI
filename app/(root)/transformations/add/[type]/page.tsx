@@ -36,6 +36,8 @@ export async function generateMetadata(props: SearchParamProps) {
     openGraph: {
       title: `${transformation.title} | Imaginify`,
       description: transformation.subTitle,
+      site_name: process.env.SERVER_URL,
+      url: process.env.SERVER_URL+'/transformations/add/'+transformation.type,
       images: [
         {
           url: transformation.image || '/assets/images/hero.png',
@@ -61,7 +63,7 @@ export async function generateMetadata(props: SearchParamProps) {
 
 }
 const AddTransformationType = async (props: SearchParamProps) => {
-const userFromClerk = await currentUser();
+  const userFromClerk = await currentUser();
 
   const params = await props.params;
 

@@ -14,59 +14,63 @@ import DownloadBtn from "@/components/shared/DownloadBtn";
 export async function generateMetadata(props: SearchParamProps) {
   const params = await props.params;
   const { id } = params;
+  try {
 
-  const image: IImage & { author: User } = await getCachedImageById(id);
+    const image: IImage & { author: User } = await getCachedImageById(id);
 
-  if (!image) {
-    return {
-      title: "404 Not Found | Imaginify",
-      description: "404 Page not found | Imaginify",
-      openGraph: {
-        title: `404 Not Found | Imaginify`,
-        description: "404 Page not found | Imaginify",
-      },
-      twitter: {
-        title: `404 Not Found | Imaginify`,
-        description: "404 Page not found | Imaginify",
-      },
-    };
-  }
+    const authorName = `${image.author.firstName} ${image.author.lastName}`;
 
-  const authorName = `${image.author.firstName} ${image.author.lastName}`;
-
-  const description = `Edited with Imaginify by ${authorName}. 
+    const description = `Edited with Imaginify by ${authorName}. 
   Details: ${image.prompt ? "prompt: " + image.prompt + ", " : ""} 
   transformationType: ${image.transformationType}. 
   | Imaginify - AI-powered image editing`;
 
-  return {
-    title: `${image.title} | Edited by ${authorName} with`,
-    description,
-    openGraph: {
-      title: `${image.title} | Edited by ${authorName} with Imaginify`,
+    return {
+      title: `${image.title} | Edited by ${authorName} with`,
       description,
-      images: [
-        {
-          url: image.secureURL || "/assets/images/hero.png",
-          width: image.width || 1200,
-          height: image.height || 630,
-          alt: `${image.title} Edited by ${authorName} - Imaginify`,
-        },
-      ],
-    },
-    twitter: {
-      title: `${image.title} | Edited by ${authorName} with Imaginify`,
-      description,
-      images: [
-        {
-          url: image.secureURL || "/assets/images/hero.png",
-          width: image.width || 1200,
-          height: image.height || 630,
-          alt: `${image.title} Edited by ${authorName} - Imaginify`,
-        },
-      ],
-    },
-  };
+      openGraph: {
+        title: `${image.title} | Edited by ${authorName} with Imaginify`,
+        description,
+        site_name: process.env.SERVER_URL,
+        url: process.env.SERVER_URL + '/transformations/' + id + '?title=' + image.title.replaceAll(" ", "+"),
+        images: [
+          {
+            url: image.secureURL || "/assets/images/hero.png",
+            width: image.width || 1200,
+            height: image.height || 630,
+            alt: `${image.title} Edited by ${authorName} - Imaginify`,
+          },
+        ],
+      },
+      twitter: {
+        title: `${image.title} | Edited by ${authorName} with Imaginify`,
+        description,
+        images: [
+          {
+            url: image.secureURL || "/assets/images/hero.png",
+            width: image.width || 1200,
+            height: image.height || 630,
+            alt: `${image.title} Edited by ${authorName} - Imaginify`,
+          },
+        ],
+      },
+    };
+  } catch (error) {
+    console.log(error);
+
+    return {
+      title: (error as Error).message + " 404 Not Found | Imaginify",
+      description: (error as Error).message + "404 Page not found | Imaginify",
+      openGraph: {
+        title: (error as Error).message + ` 404 Not Found | Imaginify`,
+        description: (error as Error).message + " 404 Page not found | Imaginify",
+      },
+      twitter: {
+        title: (error as Error).message + ` 404 Not Found | Imaginify`,
+        description: (error as Error).message + " 404 Page not found | Imaginify",
+      },
+    };
+  }
 }
 
 const ImageDetails = async (props: SearchParamProps) => {
@@ -132,7 +136,7 @@ const ImageDetails = async (props: SearchParamProps) => {
             <div className="flex-between">
               <h3 className="h3-bold text-dark-600">Original</h3>
 
-                <DownloadBtn imgUrl={image.secureURL} title={image.title}/>
+              <DownloadBtn imgUrl={image.secureURL} title={image.title} />
             </div>
 
             <Image
@@ -158,15 +162,17 @@ const ImageDetails = async (props: SearchParamProps) => {
         {userId === image.author.clerkId && (
           <div className="mt-4 space-y-4">
             <Button asChild type="button" className="submit-button capitalize">
-              <SmartLink prefetch href={`/transformations/${image._id}/update`}>
+              <SmartLink prefetch href={`/ transformations / ${image._id}/update`
+              }>
                 Update Image
-              </SmartLink>
-            </Button>
+              </SmartLink >
+            </Button >
 
             <DeleteConfirmation imageId={image._id} publicId={image.publicId} />
-          </div>
-        )}
-      </section>
+          </div >
+        )
+        }
+      </section >
     </>
   );
 };

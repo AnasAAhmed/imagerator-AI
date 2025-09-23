@@ -46,23 +46,59 @@
     transition: .4s;
     cursor: pointer;
   }
-@keyframes shine {
-  0% {
-    left: -50%;
-  }
-  100% {
-    left: 100%;
-  }
-}
 
-.animate-shine {
-  animation: shine 1s linear infinite;
-}
-.animate-marquee {
-  display: inline-block;
-  min-width: 100%;
-  animation: marquee 20s linear infinite;
-}
+  .loader {
+    width: 120px;
+    height: 60px;
+    padding: 10px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    /* background: #fff;
+    filter: blur(5px) contrast(10) hue-rotate(60deg); */
+    mix-blend-mode: darken;
+  }
+
+  .loader:before,
+  .loader:after {
+    content: "";
+    width: 40px;
+    border-radius: 50%;
+    background: #6366f1;
+    animation: l3 0.5s infinite alternate;
+  }
+
+  .loader:after {
+    --s: -1;
+  }
+
+  @keyframes l3 {
+
+    90%,
+    100% {
+      transform: translate(calc(var(--s, 1)*30px))
+    }
+  }
+
+  @keyframes shine {
+    0% {
+      left: -50%;
+    }
+
+    100% {
+      left: 100%;
+    }
+  }
+
+  .animate-shine {
+    animation: shine 1s linear infinite;
+  }
+
+  .animate-marquee {
+    display: inline-block;
+    min-width: 100%;
+    animation: marquee 20s linear infinite;
+  }
 
   .webimg:hover {
     --i: -1;

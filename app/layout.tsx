@@ -9,6 +9,7 @@ import MobNav from "@/components/shared/MobNav";
 import { Toaster } from "@/components/ui/toaster";
 import ProgressBar from "@/components/shared/ProgressBar";
 import { Suspense } from "react";
+import Script from "next/script";
 
 const IBMPlex = IBM_Plex_Sans({
   subsets: ["latin"],
@@ -59,14 +60,9 @@ export const metadata: Metadata = {
     title: "Imaginify - AI-powered image editing",
     description: "Transform your images with AI generative fill, object removal, and more using Cloudinary AI.",
     images: ["https://imagerator-ai.vercel.app/assets/images/hero.webp"], // replace with actual image
-    creator: "@anasahmedd" 
+    creator: "@anasahmedd"
   },
-  // icons: {
-  //   icon: "/favicon.ico",    
-  //   apple: "/favicon.ico",  
-  //   shortcut: "/favicon.ico"   
-  // },
-  manifest: "/manifest",
+  manifest: "/manifest.webmanifest",
   category: "technology",
   robots: {
     index: true,
@@ -104,6 +100,16 @@ export default function RootLayout({
             </div>
             <Toaster />
           </main>
+          <Script id="sw-register" strategy="afterInteractive">
+            {`
+            if ("serviceWorker" in navigator) {
+              navigator.serviceWorker
+                .register("/sw.js")
+                .then(reg => console.log("SW registered:", reg))
+                .catch(err => console.error("SW registration failed:", err));
+            }
+          `}
+          </Script>
         </body>
       </html>
     </ClerkProvider>
